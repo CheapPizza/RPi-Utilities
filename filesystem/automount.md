@@ -32,3 +32,11 @@ overlayroot=tmpfs:recurse=0
 ```
 The raspi-config utility adds overlayroot=tmpfs to cmdline.txt when enabling OverlayFS but doens't include the recurse=0 option (it apparently used to not recurse by default but now does).  
 When exiting raspi-config after enabling OverlayFS choose not to restart, then edit cmdline.txt and reboot.  
+Note that changing /boot/firmware/cmdline.txt will stop raspi-config from disabling OverlayFS without warning.  
+Presumably this happens because the line now contains :recurse=0 and it is specifically looking for overlayroot=tmpfs.  
+Remove :recurse=0 from cmdline.txt and then use raspi-config to disable OverlayFS.  
+After rebooting OverlayFS should be disabled.  
+If your /boot/firmware/ is already mounted as read-only you need to remount it as read/write to make changes to cmdline.txt:  
+```
+sudo mount -o remount,rw /boot/firmware
+```
