@@ -1,3 +1,4 @@
+# Automount external drive
 This fstab entry allows you to automatically mount an external device and doesn't require it to be connected on boot.
 
 
@@ -6,7 +7,7 @@ PARTUUID=YOUR_PARTUUID  /mnt/drive        exfat   defaults,noatime,rw,nofail,x-s
 ```
 Check PARTUUID and filesystem type with  
 ```
-blkid
+sudo blkid
 ```
 Don't include the "" quotes in the PARTUUID  
 
@@ -22,3 +23,12 @@ x-systemd.automount  -> automatically mount drive when attached
 x-systemd.idle-timeout=30s  -> unmount after idling for 30s (will stop a HDD from spinning unnecessarily)  
 0 -> don't include in backup  
 0 -> don't check on boot with fsck  
+
+## Note about OverlayFS
+If you are using OverlayFS to make your SD card read only you may fail to boot even with the nofail argument.  
+To stop OverlayFS from touching your external drive add :recurse=0 to /boot/firmware/cmdline.txt like so:  
+```
+overlayroot=tmpfs:recurse=0
+```
+The raspi-config utility adds overlayroot=tmpfs to cmdline.txt when enabling OverlayFS but doens't include the recurse=0 option (it apparently used to not recurse by default but now does).  
+When exiting raspi-config after enabling OverlayFS choose not to restart, then edit cmdline.txt and reboot.  
