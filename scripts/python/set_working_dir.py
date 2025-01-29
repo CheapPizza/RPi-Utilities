@@ -1,6 +1,6 @@
 """
 Use this snippet to set the working directory to the scripts own directory.
-This is usefull when the code may be ran from anywhere and uses relative file paths.
+This is useful when the code may be ran from anywhere and uses relative file paths.
 """
 
 import os # Import os module to access filesystem info
